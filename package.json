@@ -25,5 +25,13 @@
   "directories": {
     "test": "test"
   },
-  "description": ""
+  "description": "��#\u0000 \u0000b\u0000i\u0000r\u0000t\u0000h\u0000d\u0000a\u0000y\u0000-\u0000b\u0000o\u0000t\u0000\r\u0000 \u0000",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/YuliyaDM/birthday-bot.git"
+  },
+  "bugs": {
+    "url": "https://github.com/YuliyaDM/birthday-bot/issues"
+  },
+  "homepage": "https://github.com/YuliyaDM/birthday-bot#readme"
 }
