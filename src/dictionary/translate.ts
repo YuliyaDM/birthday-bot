@@ -1,4 +1,4 @@
-import { ICommands } from '../common/interfaces/@types/ICommands'
+import ICommands from '../common/interfaces/@types/ICommands'
 
 export const commands: ICommands = {
   help: {

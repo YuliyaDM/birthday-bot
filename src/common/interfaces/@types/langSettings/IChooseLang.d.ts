@@ -1,5 +1,5 @@
-import { ILanguages } from './ICommands'
+import ILanguages from './ICommands'
 
-export interface IChooseLang extends ILanguages {
+export default interface IChooseLang extends ILanguages {
     'phrase': ILanguages,
 }

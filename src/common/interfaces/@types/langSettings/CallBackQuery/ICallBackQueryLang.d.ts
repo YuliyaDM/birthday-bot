@@ -1,4 +1,4 @@
-export interface ICallBackQueryLang {
+export default interface ICallBackQueryLang {
     'English': {
         'English': string,
         'Ukrainian': string,

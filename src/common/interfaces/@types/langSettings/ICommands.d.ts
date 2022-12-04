@@ -1,6 +1,6 @@
-import { ICallBackQuery } from './CallBackQuery/ICallBackQuery'
+import ICallBackQuery from './CallBackQuery/ICallBackQuery'
 
-export interface ILanguages {
+export default interface ILanguages {
     'English': string | ICallBackQuery,
     'Ukrainian': string | ICallBackQuery,
 }

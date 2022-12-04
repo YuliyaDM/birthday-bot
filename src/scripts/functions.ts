@@ -1,7 +1,8 @@
 /* eslint-disable camelcase */
-import { ILangList } from '../common/interfaces/@types/langSettings/IList'
-import { ILanguageArr } from '../common/interfaces/@types/langSettings/IArr'
-import { INewUserLang } from '../common/interfaces/@types/INewUserLang'
+import INewUserLang from '../common/interfaces/@types/INewUserLang'
+import IRegexps from '../common/interfaces/@types/IRegexp'
+import ILanguageArr from '../common/interfaces/@types/langSettings/IArr'
+import ILangList from '../common/interfaces/@types/langSettings/IList'
 
 export function CheckLanguage (usersLang: ILanguageArr, name: string): ILangList {
   for (let i: number = 0, userLangLength: number = usersLang.length; i < userLangLength; i++) {
@@ -36,26 +37,15 @@ export function CheckLangArr (usersLang: ILanguageArr, name: string): (number | 
 }
 
 export function CheckBirthdayUser (text: string): (string | null) {
-  const regexpCheckString = /\/getBirthday(( [@A-z0-9]{1,}){2})|( [@A-z0-9]{1,})/gm
-  const correctString: boolean = regexpCheckString.test(text)
-  console.log(text.match(regexpCheckString))
-  if (correctString || text === '/getBirthday') {
-    const result: string = text.replace(/\/getBirthday/gm, '').replace(/( $|^ )/gm, '')
-    return result
+  const regexps: IRegexps = {
+    removeCommand: /^.*\/getBirthday( ){0,}|( ){1,}$/mg,
+    findError: /[^A-z0-9_@ ]/gm
   }
-  return 'I cannot understand this command.'
+  const { removeCommand, findError } = regexps
+  const matchName: string = text.replace(removeCommand, '')
+  const isError: boolean = !!(matchName.match(findError) as RegExpMatchArray)
+  if (!matchName.length) return ''
+  if (!isError) return matchName
+
+  return null
 }
-
-const TEST1 = '/getBirthday @quartz555' // nickname
-const TEST2 = '/getBirthday Bogdan'
-const TEST3 = '/getBirthday Grishin'
-const TEST4 = '/getBirthday Bogdan Grishin'
-const TEST5 = '/getBirthday'
-const TEST6 = '/getBirthday 23jioc=23=-ox'
-
-console.log(CheckBirthdayUser(TEST1))
-console.log(CheckBirthdayUser(TEST2))
-console.log(CheckBirthdayUser(TEST3))
-console.log(CheckBirthdayUser(TEST4))
-console.log(CheckBirthdayUser(TEST5))
-console.log(CheckBirthdayUser(TEST6))

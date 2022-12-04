@@ -1,8 +1,8 @@
-import {ILangList} from "./IList";
+import ILangList from './IList'
 
 type Name = string | undefined;
 
-export interface IUserLang {
+export default interface IUserLang {
     username: Name,
     first_name: Name,
     last_name: Name,

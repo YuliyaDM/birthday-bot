@@ -37,25 +37,23 @@ function CheckLangArr(usersLang, name) {
 }
 exports.CheckLangArr = CheckLangArr;
 function CheckBirthdayUser(text) {
-    const regexpCheckString = /\/getBirthday(( [@A-z0-9]{1,}){2})|( [@A-z0-9]{1,})/gm;
-    const correctString = regexpCheckString.test(text);
-    console.log(text.match(regexpCheckString));
-    if (correctString || text === '/getBirthday') {
-        const result = text.replace(/\/getBirthday/gm, '').replace(/( $|^ )/gm, '');
-        return result;
-    }
-    return 'I cannot understand this command.';
+    const regexps = {
+        removeCommand: /^.*\/getBirthday( ){0,}|( ){1,}$/mg,
+        findError: /[^A-z0-9_@ ]/gm
+    };
+    const { removeCommand, findError } = regexps;
+    const matchName = text.replace(removeCommand, '');
+    const isError = !!matchName.match(findError);
+    if (!matchName.length)
+        return '';
+    if (!isError)
+        return matchName;
+    return null;
 }
 exports.CheckBirthdayUser = CheckBirthdayUser;
-const TEST1 = '/getBirthday @quartz555'; // nickname
-const TEST2 = '/getBirthday Bogdan';
-const TEST3 = '/getBirthday Grishin';
-const TEST4 = '/getBirthday Bogdan Grishin';
-const TEST5 = '/getBirthday';
-const TEST6 = '/getBirthday 23jioc=23=-ox';
-console.log(CheckBirthdayUser(TEST1));
-console.log(CheckBirthdayUser(TEST2));
-console.log(CheckBirthdayUser(TEST3));
-console.log(CheckBirthdayUser(TEST4));
-console.log(CheckBirthdayUser(TEST5));
-console.log(CheckBirthdayUser(TEST6));
+console.log(CheckBirthdayUser('Julia Pirogova'));
+console.log(CheckBirthdayUser('Zahar'));
+console.log(CheckBirthdayUser('@dkaraush'));
+console.log(CheckBirthdayUser('Roman Shmelev'));
+console.log(CheckBirthdayUser('@ju__par'));
+console.log(CheckBirthdayUser('ksusha'));

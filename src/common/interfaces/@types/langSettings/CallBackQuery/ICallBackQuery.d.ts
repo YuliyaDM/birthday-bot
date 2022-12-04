@@ -1,6 +1,6 @@
-import { IQueryButtons } from './IQueryButtons'
+import IQueryButtons from './IQueryButtons'
 
-export interface ICallBackQuery {
+export default interface ICallBackQuery {
     reply_markup: {
         inline_keyboard: IQueryButtons[][]
     },

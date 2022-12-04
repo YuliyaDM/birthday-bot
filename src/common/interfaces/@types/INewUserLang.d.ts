@@ -1,8 +1,8 @@
-import { ILangList } from './langSettings/IList'
+import ILangList from './langSettings/IList'
 
 type Name = string | undefined;
 
-export interface INewUserLang {
+export default interface INewUserLang {
     username: Name,
     first_name: Name,
     last_name: Name,

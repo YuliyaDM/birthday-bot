@@ -1,1 +1,3 @@
-export type ILangList = 'English' | 'Ukrainian';
+type ILangList = 'English' | 'Ukrainian';
+
+export { ILangList as default }

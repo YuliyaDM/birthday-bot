@@ -1,16 +1,14 @@
 /* eslint-disable import/first */
-require('dotenv').config({ path: require('find-config')('.env') })
+require('dotenv').config({ path: './private/.env' })
 import { Context, Telegraf } from 'telegraf'
 import { Update } from 'telegraf/typings/core/types/typegram'
 
-import { INewUserLang } from './common/interfaces/@types/INewUserLang'
-import { ILangList } from './common/interfaces/@types/langSettings/IList'
-import { commands } from './dictionary/text'
+import INewUserLang from './common/interfaces/@types/INewUserLang'
+import ILangList from './common/interfaces/@types/langSettings/IList'
+import { commands } from './dictionary/translate'
 import { CheckLangArr, CheckLanguage, CreateUserLang } from './scripts/functions'
 
-console.log(process.env.TOKEN)
-
-const TOKEN: string = '5702448393:AAE3OW-Fun-z2Vv79SGIRFlTXgxLiqUOaQc'
+const { TOKEN } = process.env
 
 const Bot: Telegraf<Context<Update>> = new Telegraf(TOKEN as string)
 

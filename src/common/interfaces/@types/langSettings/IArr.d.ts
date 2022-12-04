@@ -1,3 +1,5 @@
-import {IUserLang} from "./IUser";
+import IUserLang from './IUser'
 
-export type ILanguageArr = Array<IUserLang>;
+type ILanguageArr = Array<IUserLang>
+
+export { ILanguageArr as default }
