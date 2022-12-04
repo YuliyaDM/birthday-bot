@@ -1,7 +1,8 @@
 /* eslint-disable import/first */
-/* eslint-disable camelcase */
 require('dotenv').config({ path: require('find-config')('.env') })
-import { Telegraf } from 'telegraf'
+import { Context, Telegraf } from 'telegraf'
+import { Update } from 'telegraf/typings/core/types/typegram'
+
 import { INewUserLang } from './common/interfaces/@types/INewUserLang'
 import { ILangList } from './common/interfaces/@types/langSettings/IList'
 import { commands } from './dictionary/text'
@@ -11,7 +12,7 @@ console.log(process.env.TOKEN)
 
 const TOKEN: string = '5702448393:AAE3OW-Fun-z2Vv79SGIRFlTXgxLiqUOaQc'
 
-const Bot = new Telegraf(TOKEN as string)
+const Bot: Telegraf<Context<Update>> = new Telegraf(TOKEN as string)
 
 const usersLang: INewUserLang[] = []
 
