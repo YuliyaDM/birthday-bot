@@ -38,7 +38,7 @@ function CheckLangArr(usersLang, name) {
 exports.CheckLangArr = CheckLangArr;
 function CheckBirthdayUser(text) {
     const regexps = {
-        removeCommand: /^.*\/getBirthday( ){0,}|( ){1,}$/mg,
+        removeCommand: /^.*\/get(Age|Birthday)( ){0,}|( ){1,}$/mg,
         findError: /[^A-z0-9_@ ]/gm
     };
     const { removeCommand, findError } = regexps;
@@ -51,9 +51,3 @@ function CheckBirthdayUser(text) {
     return null;
 }
 exports.CheckBirthdayUser = CheckBirthdayUser;
-console.log(CheckBirthdayUser('Julia Pirogova'));
-console.log(CheckBirthdayUser('Zahar'));
-console.log(CheckBirthdayUser('@dkaraush'));
-console.log(CheckBirthdayUser('Roman Shmelev'));
-console.log(CheckBirthdayUser('@ju__par'));
-console.log(CheckBirthdayUser('ksusha'));

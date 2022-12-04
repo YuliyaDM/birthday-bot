@@ -38,7 +38,7 @@ export function CheckLangArr (usersLang: ILanguageArr, name: string): (number | 
 
 export function CheckBirthdayUser (text: string): (string | null) {
   const regexps: IRegexps = {
-    removeCommand: /^.*\/getBirthday( ){0,}|( ){1,}$/mg,
+    removeCommand: /^.*\/get(Age|Birthday)( ){0,}|( ){1,}$/mg,
     findError: /[^A-z0-9_@ ]/gm
   }
   const { removeCommand, findError } = regexps
