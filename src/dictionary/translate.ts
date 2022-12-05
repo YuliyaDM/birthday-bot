@@ -3,25 +3,31 @@ import ICommands from '../common/interfaces/@types/ICommands'
 export const commands: ICommands = {
   help: {
     English:
-            `/about - about this bot.
-/help - list of commands.
-/start - start this bot.`,
+            `<em>/about</em> - about this bot.
+            <em>/help</em> - list of commands.
+<em>/start</em> - start this bot.`,
     Ukrainian:
-            `/about - про цього бота.
-/help - перелік усіх команд.
-/start - перезапустити бота або почати спілкування з ним.`
+            `<em>/about</em> - про цього бота.
+<em>/help</em> - перелік усіх команд.
+<em>/start</em> - перезапустити бота або почати спілкування з ним.`
   },
   about: {
     English:
-            'This bot has created by Julia and Lera recently',
+            'This bot has created by <strong>Julia</strong> and <strong>Lera</strong> recently',
     Ukrainian:
-            'Цей бот створений Julia і Lera нещодавно'
+            'Цей бот створений <strong>Julia</strong> і <strong>Lera</strong> нещодавно'
   },
   start: {
     English:
-            'Hello! This bot have commands for getting birthdays!',
+            'Hello! This bot have commands for <u>getting birthdays</u>!',
     Ukrainian:
-            'Привіт! Цей бот має команди для отримання дня народження користувачів.'
+            'Привіт! Цей бот має команди для <u>отримання дня народження користувачів</u>!'
+  },
+  getAge: {
+    emptyStr: {
+      Ukrainian: 'Добре. Напишіть <bold>ім\'я, або фамілію, або юзернейм</bold> користувача, щоб отримати його вік.',
+      English: 'Okay. Write <bold>name, last_name or username</bold> of user to get their age/'
+    }
   },
   chooseLanguage: {
     English: {

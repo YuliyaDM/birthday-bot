@@ -1,44 +1,42 @@
 const assert = require('assert')
-const { CheckBirthdayUser } = require('../dist/scripts/functions')
+const { GetUsernameInCommand } = require('../dist/scripts/functions')
 
 describe('a couple of tests of first functions', () => {
-  describe('first command ()', () => {
+  describe('getting username in GetAge or GetBirthday commands', () => {
     it('should return nickname of user', () => {
       const test1 = '/getBirthday @ju_par'
-      const test3 = '/getAge @dkaraush'
-      const test2 = '/getBirthday @crzdvl'
+      const test2 = '/getAge @dkaraush'
 
-      assert.equal(CheckBirthdayUser(test1), '@ju_par')
-      assert.equal(CheckBirthdayUser(test2), '@crzdvl')
-      assert.equal(CheckBirthdayUser(test3), '@dkaraush')
+      assert.equal(GetUsernameInCommand(test1), '@ju_par')
+      assert.equal(GetUsernameInCommand(test2), '@dkaraush')
     })
     it('should return name of user', () => {
       const test1 = '/getBirthday Julia'
       const test2 = '/getAge Julia'
 
-      assert.equal(CheckBirthdayUser(test1), 'Julia')
-      assert.equal(CheckBirthdayUser(test2), 'Julia')
+      assert.equal(GetUsernameInCommand(test1), 'Julia')
+      assert.equal(GetUsernameInCommand(test2), 'Julia')
     })
-    it('should return first name and last name of user', () => {
+    it('should return first name and last name of user in array', () => {
       const test1 = '/getBirthday Julia Pirogova'
       const test2 = '/getAge Julia Pirogova'
 
-      assert.equal(CheckBirthdayUser(test1), 'Julia Pirogova')
-      assert.equal(CheckBirthdayUser(test2), 'Julia Pirogova')
+      assert.equal(GetUsernameInCommand(test1).length, 2)
+      assert.equal(GetUsernameInCommand(test2).length, 2)
     })
     it('should return an empty string', () => {
       const test1 = '/getBirthday'
       const test2 = '/getAge'
 
-      assert.equal(CheckBirthdayUser(test1), '')
-      assert.equal(CheckBirthdayUser(test2), '')
+      assert.equal(GetUsernameInCommand(test1), '')
+      assert.equal(GetUsernameInCommand(test2), '')
     })
     it('should return null', () => {
       const test1 = '/getBirthday 23jioc=23=-ox'
       const test2 = '/getAge 209=fw=4-'
 
-      assert.equal(CheckBirthdayUser(test1), null)
-      assert.equal(CheckBirthdayUser(test2), null)
+      assert.equal(GetUsernameInCommand(test1), null)
+      assert.equal(GetUsernameInCommand(test2), null)
     })
   })
 })

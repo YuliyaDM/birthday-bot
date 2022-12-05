@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.CheckBirthdayUser = exports.CheckLangArr = exports.CreateUserLang = exports.CheckLanguage = void 0;
+exports.GetUsernameInCommand = exports.CheckLangArr = exports.CreateUserLang = exports.CheckLanguage = void 0;
 function CheckLanguage(usersLang, name) {
     for (let i = 0, userLangLength = usersLang.length; i < userLangLength; i++) {
         const el = usersLang[i];
@@ -36,18 +36,28 @@ function CheckLangArr(usersLang, name) {
     return false;
 }
 exports.CheckLangArr = CheckLangArr;
-function CheckBirthdayUser(text) {
+function GetUsernameInCommand(text) {
     const regexps = {
         removeCommand: /^.*\/get(Age|Birthday)( ){0,}|( ){1,}$/mg,
-        findError: /[^A-z0-9_@ ]/gm
+        findError: /[^A-z0-9_@ ]/gm,
+        findSpace: / /gm
     };
-    const { removeCommand, findError } = regexps;
+    const { removeCommand, findError, findSpace } = regexps;
     const matchName = text.replace(removeCommand, '');
-    const isError = !!matchName.match(findError);
-    if (!matchName.length)
+    const isError = matchName.match(findError);
+    console.log(isError);
+    if (!isError) {
+        if (matchName.length) {
+            if (matchName.match(findSpace)) {
+                return matchName.split(' ');
+            }
+            return matchName;
+        }
         return '';
-    if (!isError)
-        return matchName;
+    }
     return null;
 }
-exports.CheckBirthdayUser = CheckBirthdayUser;
+exports.GetUsernameInCommand = GetUsernameInCommand;
+console.log(GetUsernameInCommand('/getBirthday Julia Pirogova'));
+console.log(GetUsernameInCommand('/getAge Julia'));
+console.log(GetUsernameInCommand('/getAge'));

@@ -18,7 +18,10 @@
     "rules": {
         "camelcase": "off",
         "simple-import-sort/imports": "error",
-        "simple-import-sort/exports": "error"
+        "simple-import-sort/exports": "error",
+        "brace-style": ["error", "stroustrup"],
+        "yoda": ["error", "always"],
+        "curly": ["error", "all"]
     },
     "overrides": [{
         "files": ["./test/test.js"],

@@ -4,35 +4,42 @@ import { Context, Telegraf } from 'telegraf'
 import { Update } from 'telegraf/typings/core/types/typegram'
 
 import INewUserLang from './common/interfaces/@types/INewUserLang'
+import IQueue from './common/interfaces/@types/IQueue'
+import ICallBackQuery from './common/interfaces/@types/langSettings/CallBackQuery/ICallBackQuery'
 import ILangList from './common/interfaces/@types/langSettings/IList'
 import { commands } from './dictionary/translate'
-import { CheckLangArr, CheckLanguage, CreateUserLang } from './scripts/functions'
+import { CheckLangArr, CheckLanguage, CreateUserLang, GetUsernameInCommand } from './scripts/functions'
 
 const { TOKEN } = process.env
 
 const Bot: Telegraf<Context<Update>> = new Telegraf(TOKEN as string)
 
-const usersLang: INewUserLang[] = []
+const USERSLANGS: INewUserLang[] = []
+
+// eslint-disable-next-line prefer-const
+let queue: IQueue[] = []
 
 Bot.command(['help', 'about', 'start'], ctx => {
   const { username, first_name, last_name } = ctx.update.message.from
-  const name: string = username ?? first_name ?? last_name
-  const userLang: string = CheckLanguage(usersLang, name)
   const { text } = ctx.update.message
+  const name: string = username ?? first_name ?? last_name
+  const userLang: string = CheckLanguage(USERSLANGS, name)
+  const message: string = commands[text.slice(1) as keyof object][userLang as keyof object] as string
 
-  ctx.reply(commands[text.slice(1) as keyof object][userLang as keyof object] as string)
+  ctx.reply(message, {
+    parse_mode: 'HTML'
+  })
 })
 
 Bot.command('chooseLanguage', ctx => {
   const { username, first_name, last_name } = ctx.update.message.from
   const name: string = username ?? first_name ?? last_name
-  const userLang: string = CheckLanguage(usersLang, name)
-
-  console.log(userLang)
+  const userLang: string = CheckLanguage(USERSLANGS, name)
 
   if (commands.chooseLanguage) {
-    console.log(commands.chooseLanguage.phrase[userLang as keyof object])
-    ctx.reply(commands.chooseLanguage.phrase[userLang as keyof object], commands.chooseLanguage[userLang as keyof object])
+    const message: string = commands.chooseLanguage.phrase[userLang as keyof object]
+    const languages: ICallBackQuery = commands.chooseLanguage[userLang as keyof object]
+    ctx.reply(message, languages)
   }
 })
 
@@ -40,25 +47,39 @@ Bot.action(['English', 'Ukrainian'], ctx => {
   const { username, first_name, last_name } = ctx.update.callback_query.from
   const name: string = username ?? first_name ?? last_name
   const { data } = ctx.update.callback_query
-  const resultCheck: (number | boolean) = CheckLangArr(usersLang, name)
-  const firstLang = CheckLanguage(usersLang, name)
+  const resultCheck: (number | boolean) = CheckLangArr(USERSLANGS, name)
+  const firstLang = CheckLanguage(USERSLANGS, name)
 
-  if (typeof resultCheck === 'boolean') {
+  if ('boolean' === typeof resultCheck) {
     const newUserLang: INewUserLang = CreateUserLang(ctx)
-    usersLang.push(newUserLang)
-    if (commands.callBackQuery) ctx.reply(commands.callBackQuery[firstLang][newUserLang.language])
-  } else {
-    usersLang[resultCheck as number].language = data as ILangList
-    if (commands.callBackQuery) ctx.reply(commands.callBackQuery[firstLang][data as keyof object])
+    USERSLANGS.push(newUserLang)
+    if (commands.callBackQuery) {
+      ctx.reply(commands.callBackQuery[firstLang][newUserLang.language])
+    }
+  }
+  else {
+    USERSLANGS[resultCheck as number].language = data as ILangList
+    if (commands.callBackQuery) {
+      ctx.reply(commands.callBackQuery[firstLang][data as keyof object], {
+        parse_mode: 'HTML'
+      })
+    }
   }
 
-  console.log(usersLang)
+  console.log(USERSLANGS)
 })
 
-Bot.hears('/getBirthday', ctx => {
+Bot.hears(['/getBirthday', '/getAge'], ctx => {
+  const matchCommand: RegExp = /\/get(Birthday|Age)/gm
   const { text } = ctx.update.message
-
-  console.log(text)
+  const { username, first_name, last_name } = ctx.update.message.from
+  const typedCommand = text.match(matchCommand)![0]
+  const usersData = GetUsernameInCommand(text)
+  if ('' === usersData) {
+    const userQueue: IQueue = { username, first_name, last_name, command: typedCommand }
+    queue.push(userQueue)
+    console.log(queue)
+  }
 })
 
 Bot.launch()

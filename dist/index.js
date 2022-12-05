@@ -7,20 +7,25 @@ const translate_1 = require("./dictionary/translate");
 const functions_1 = require("./scripts/functions");
 const { TOKEN } = process.env;
 const Bot = new telegraf_1.Telegraf(TOKEN);
-const usersLang = [];
+const USERSLANGS = [];
+// eslint-disable-next-line prefer-const
+let queue = [];
 Bot.command(['help', 'about', 'start'], ctx => {
     var _a;
     const { username, first_name, last_name } = ctx.update.message.from;
     const name = (_a = username !== null && username !== void 0 ? username : first_name) !== null && _a !== void 0 ? _a : last_name;
-    const userLang = (0, functions_1.CheckLanguage)(usersLang, name);
+    const userLang = (0, functions_1.CheckLanguage)(USERSLANGS, name);
     const { text } = ctx.update.message;
-    ctx.reply(translate_1.commands[text.slice(1)][userLang]);
+    const message = translate_1.commands[text.slice(1)][userLang];
+    ctx.reply(message, {
+        parse_mode: 'HTML'
+    });
 });
 Bot.command('chooseLanguage', ctx => {
     var _a;
     const { username, first_name, last_name } = ctx.update.message.from;
     const name = (_a = username !== null && username !== void 0 ? username : first_name) !== null && _a !== void 0 ? _a : last_name;
-    const userLang = (0, functions_1.CheckLanguage)(usersLang, name);
+    const userLang = (0, functions_1.CheckLanguage)(USERSLANGS, name);
     console.log(userLang);
     if (translate_1.commands.chooseLanguage) {
         console.log(translate_1.commands.chooseLanguage.phrase[userLang]);
@@ -32,23 +37,34 @@ Bot.action(['English', 'Ukrainian'], ctx => {
     const { username, first_name, last_name } = ctx.update.callback_query.from;
     const name = (_a = username !== null && username !== void 0 ? username : first_name) !== null && _a !== void 0 ? _a : last_name;
     const { data } = ctx.update.callback_query;
-    const resultCheck = (0, functions_1.CheckLangArr)(usersLang, name);
-    const firstLang = (0, functions_1.CheckLanguage)(usersLang, name);
+    const resultCheck = (0, functions_1.CheckLangArr)(USERSLANGS, name);
+    const firstLang = (0, functions_1.CheckLanguage)(USERSLANGS, name);
     if (typeof resultCheck === 'boolean') {
         const newUserLang = (0, functions_1.CreateUserLang)(ctx);
-        usersLang.push(newUserLang);
+        USERSLANGS.push(newUserLang);
         if (translate_1.commands.callBackQuery)
             ctx.reply(translate_1.commands.callBackQuery[firstLang][newUserLang.language]);
     }
     else {
-        usersLang[resultCheck].language = data;
-        if (translate_1.commands.callBackQuery)
-            ctx.reply(translate_1.commands.callBackQuery[firstLang][data]);
+        USERSLANGS[resultCheck].language = data;
+        if (translate_1.commands.callBackQuery) {
+            ctx.reply(translate_1.commands.callBackQuery[firstLang][data], {
+                parse_mode: 'HTML'
+            });
+        }
     }
-    console.log(usersLang);
+    console.log(USERSLANGS);
 });
-Bot.hears('/getBirthday', ctx => {
+Bot.hears(['/getBirthday', '/getAge'], ctx => {
+    const matchCommand = /\/get(Birthday|Age)/gm;
     const { text } = ctx.update.message;
-    console.log(text);
+    const { username, first_name, last_name } = ctx.update.message.from;
+    const typedCommand = text.match(matchCommand)[0];
+    const usersData = (0, functions_1.GetUsernameInCommand)(text);
+    if (usersData === '') {
+        const userQueue = { username, first_name, last_name, command: typedCommand };
+        queue.push(userQueue);
+        console.log(queue);
+    }
 });
 Bot.launch();
