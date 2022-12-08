@@ -19,14 +19,21 @@
         "camelcase": "off",
         "simple-import-sort/imports": "error",
         "simple-import-sort/exports": "error",
-        "brace-style": ["error", "stroustrup"],
+        "brace-style": ["error", "stroustrup", { "allowSingleLine": true }],
         "yoda": ["error", "always"],
         "curly": ["error", "all"]
     },
-    "overrides": [{
+    "overrides": [
+    {
         "files": ["./test/test.js"],
         "rules": {
             "no-undef": "off"
+        }
+    }, 
+    {
+        "files": ["./src/common/enums/IUserSheets.enum.ts"],
+        "rules": {
+            "no-unused-vars": "off"
         }
     }]
 }

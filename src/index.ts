@@ -8,7 +8,7 @@ import IQueue from './common/interfaces/@types/IQueue'
 import ICallBackQuery from './common/interfaces/@types/langSettings/CallBackQuery/ICallBackQuery'
 import ILangList from './common/interfaces/@types/langSettings/IList'
 import { commands } from './dictionary/translate'
-import { CheckLangArr, CheckLanguage, CreateUserLang, GetUsernameInCommand } from './scripts/functions'
+import { CheckLangArr, CheckLanguage, CreateUserLang, FindNameInGetCommands } from './scripts/functions'
 
 const { TOKEN } = process.env
 
@@ -35,7 +35,6 @@ Bot.command('chooseLanguage', ctx => {
   const { username, first_name, last_name } = ctx.update.message.from
   const name: string = username ?? first_name ?? last_name
   const userLang: string = CheckLanguage(USERSLANGS, name)
-
   if (commands.chooseLanguage) {
     const message: string = commands.chooseLanguage.phrase[userLang as keyof object]
     const languages: ICallBackQuery = commands.chooseLanguage[userLang as keyof object]
@@ -74,12 +73,23 @@ Bot.hears(['/getBirthday', '/getAge'], ctx => {
   const { text } = ctx.update.message
   const { username, first_name, last_name } = ctx.update.message.from
   const typedCommand = text.match(matchCommand)![0]
-  const usersData = GetUsernameInCommand(text)
+  const usersData = FindNameInGetCommands(text)
   if ('' === usersData) {
     const userQueue: IQueue = { username, first_name, last_name, command: typedCommand }
     queue.push(userQueue)
     console.log(queue)
   }
+  if (!usersData) {
+    ctx.reply('')
+  }
+})
+
+Bot.hears(['/whoHasThisAge'], ctx => {
+  const matchCommand: RegExp = /\/whoHasThisAge/gm
+  const { text } = ctx.update.message
+  const { username, first_name, last_name } = ctx.update.message.from
+  const typedCommand = text.match(matchCommand)![0]
+  console.log(username, first_name, last_name, typedCommand)
 })
 
 Bot.launch()

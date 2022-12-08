@@ -1,7 +1,8 @@
 import ILanguages from '../langSettings/ICommands'
 
 interface IGetAge {
-    emptyStr: ILanguages
+    emptyStr: ILanguages,
+    error: ILanguages
 }
 
 export { IGetAge as default }

@@ -1,8 +1,14 @@
-/* eslint-disable camelcase */
+import { IFindNameInGetCommands, IGetCommands, IGetUsersInfo, IRequest } from '../common/interfaces/@types/IFunctions'
 import INewUserLang from '../common/interfaces/@types/INewUserLang'
-import IRegexps from '../common/interfaces/@types/IRegexp'
+import { IRegexpsGetCommands } from '../common/interfaces/@types/IRegexp'
 import ILanguageArr from '../common/interfaces/@types/langSettings/IArr'
 import ILangList from '../common/interfaces/@types/langSettings/IList'
+import * as Regexp from '../constants/regexp'
+
+const { google } = require('googleapis')
+const sheets = google.sheets('v4')
+
+require('dotenv').config({ path: './private/.env' })
 
 export function CheckLanguage (usersLang: ILanguageArr, name: string): ILangList {
   for (let i: number = 0, userLangLength: number = usersLang.length; i < userLangLength; i++) {
@@ -40,18 +46,18 @@ export function CheckLangArr (usersLang: ILanguageArr, name: string): (number | 
   return false
 }
 
-export function GetUsernameInCommand (text: string): (string | string[] | null) {
-  const regexps: IRegexps = {
-    removeCommand: /^.*\/get(Age|Birthday)( ){0,}|( ){1,}$/mg,
-    findError: /[^A-z0-9_@ ]/gm,
-    findSpace: / /gm
-  }
-  const { removeCommand, findError, findSpace } = regexps
+export function FindNameInGetCommands (text: string): IFindNameInGetCommands {
+  const command: IGetCommands = text.match(Regexp.matchGetCommands.findCommands) as unknown as IGetCommands
+  const regexps: IRegexpsGetCommands = Regexp[command]
+  const { removeCommand, findError, findSpace, findDigits } = regexps
   const matchName: string = text.replace(removeCommand, '')
-  const isError = matchName.match(findError) as RegExpMatchArray
-  console.log(isError)
+  const isError: (null | RegExpMatchArray) = matchName.match(findError)
   if (!isError) {
     if (matchName.length) {
+      if (findDigits) {
+        const age: string = matchName.match(findDigits)![0]
+        if (100 < +age) { return 'A very big age' }
+      }
       if (matchName.match(findSpace)) {
         return matchName.split(' ')
       }
@@ -59,10 +65,23 @@ export function GetUsernameInCommand (text: string): (string | string[] | null) 
     }
     return ''
   }
-
   return null
 }
 
-console.log(GetUsernameInCommand('/getBirthday Julia Pirogova'))
-console.log(GetUsernameInCommand('/getAge Julia'))
-console.log(GetUsernameInCommand('/getAge'))
+export async function GetUsersInfo (): IGetUsersInfo {
+  try {
+    const request: IRequest = {
+      spreadsheetId: process.env.SPREADSHEET_ID as string,
+      range: ['A1:J14'],
+      auth: process.env.GOOGLE_SPREADSHEET_API_KEY as string
+    }
+
+    const response: string = (await sheets.spreadsheets.values.get(request))
+    console.log(JSON.stringify(response, null, 2))
+  }
+  catch (error: unknown) {
+    console.log(error)
+  }
+}
+
+GetUsersInfo()

@@ -1,6 +1,10 @@
-export default interface IRegexps {
+export interface IRegexpsGetCommands {
     removeCommand: RegExp,
     findError: RegExp,
     findSpace: RegExp,
-    checkData?: RegExp
+    findDigits?: RegExp
+}
+
+export interface IMatchGetCommands {
+    findCommands: RegExp
 }
