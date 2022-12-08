@@ -5,7 +5,28 @@
   "scripts": {
     "test": "mocha"
   },
-  "author": "",
+  "author": {
+    "name": "Julia Pirogova",
+    "email": "juliapirogova03@gmail.com",
+    "url": "https://github.com/YuliyaDM"
+  },
+  "contributors": [
+    {
+      "name": "Julia Pirogova",
+      "email": "juliapirogova03@gmail.com",
+      "url": "https://github.com/YuliyaDM"
+    },
+    {
+      "name": "Viktoria Hrechukha",
+      "email": "viktoriia.hrechukha@gmail.com",
+      "url": "https://github.com/vhrechukha"
+    },
+    {
+      "name": "Valeriia Proshachenko",
+      "email": "vproshachenko@gmail.com",
+      "url": "https://github.com/Valerchixx"
+    }
+  ],
   "license": "ISC",
   "dependencies": {
     "dotenv": "^16.0.3",
