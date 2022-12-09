@@ -1,4 +1,4 @@
-﻿# birthday-bot
+﻿# birthday-bot <img src="https://img.shields.io/github/watchers/YuliyaDM/birthday-bot?style=flat-square" />
 
 ## What can this telegram-bot do?
 
