@@ -12,19 +12,19 @@
 
 * **Get the whole list of Users' Birthdays**
 
-```/getBirthdaysList ${amount}```
+```/getBirthdaysList ${amount} ${beginning | end}```
 
 * **Get Birthday that has left already**
 
-```/getBirthdaysLeft ${amount}```
+```/getBirthdaysLeft ${amount} ${beginning | end}```
 
 * **Get Birthdays that hasn't left yet**
 
-```/getBirthdaysWillBe ${amount}```
+```/getBirthdaysWillBe ${amount} ${beginning | end}```
 
 * **Get users who has specific age**
 
-```/whoHasThisAge ${age}```
+```/whoHasThisAge ${age} ${amount}```
 
 ## What languages can you choose?
 
