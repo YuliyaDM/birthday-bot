@@ -1,12 +1,16 @@
 const assert = require('assert')
-const { FindNameInGetCommands } = require('../dist/scripts/functions')
+const { FindNameInGetCommands, GetBirthday } = require('../dist/scripts/functions')
 
 describe('a couple of tests of first functions', () => {
-  describe('/whoHasThisAge ', () => {
+  describe('/whoHasThisAge', () => {
     it('should return age', () => {
       const test1 = '/whoHasThisAge 16'
+      const test2 = '/whoHasThisAge 24'
+      const test3 = '/whoHasThisAge 32'
 
       assert.equal(FindNameInGetCommands(test1), '16')
+      assert.equal(FindNameInGetCommands(test2), '24')
+      assert.equal(FindNameInGetCommands(test3), '32')
     })
     it('should return null', () => {
       const test1 = '/whoHasThisAge @$l23'
@@ -26,6 +30,34 @@ describe('a couple of tests of first functions', () => {
       const test1 = '/whoHasThisAge'
 
       assert.equal(FindNameInGetCommands(test1), '')
+    })
+    it('should return birthdays', () => {
+      const test1 = GetBirthday('@Lijua').then(value => {
+        const value0 = {
+          first_name: 'Lijua',
+          last_name: '',
+          date: '03.06.2009',
+          username: '@ju_par'
+        }
+        assert.equal(value[0], result)
+      })
+
+      const test2 = GetBirthday('Владимир').then(value => {
+        const result0 = {
+          first_name: 'Владимир',
+          last_name: 'Панкратьев',
+          date: '11.01.2008',
+          username: '@vl_pnk'
+        }
+        const result1 = {
+          first_name: 'Владимир',
+          last_name: 'Шевченко',
+          date: '12.01.2005',
+          username: '@vshevchenko'
+        }
+        assert.equal(value[0], result0)
+        assert.equal(value[1], result1)
+      })
     })
   })
   describe('/getAge', () => {

@@ -27,7 +27,8 @@
     {
         "files": ["./test/test.js"],
         "rules": {
-            "no-undef": "off"
+            "no-undef": "off",
+            "no-unused-vars": "off"
         }
     }, 
     {

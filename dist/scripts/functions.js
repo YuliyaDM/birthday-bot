@@ -22,17 +22,12 @@ var __importStar = (this && this.__importStar) || function (mod) {
     __setModuleDefault(result, mod);
     return result;
 };
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments || [])).next());
-    });
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.GetUsersInfo = exports.FindNameInGetCommands = exports.CheckLangArr = exports.CreateUserLang = exports.CheckLanguage = void 0;
+exports.GetUsersInfo = exports.GetListOfBirthdays = exports.BirthdaysTypes = exports.GetBirthday = exports.FindNameInGetCommands = exports.CheckLangArr = exports.CreateUserLang = exports.CheckLanguage = void 0;
+const moment_1 = __importDefault(require("moment"));
 const Regexp = __importStar(require("../constants/regexp"));
 const { google } = require('googleapis');
 const sheets = google.sheets('v4');
@@ -98,21 +93,74 @@ function FindNameInGetCommands(text) {
     return null;
 }
 exports.FindNameInGetCommands = FindNameInGetCommands;
-function GetUsersInfo() {
-    return __awaiter(this, void 0, void 0, function* () {
-        try {
-            const request = {
-                spreadsheetId: process.env.SPREADSHEET_ID,
-                range: ['A1:J14'],
-                auth: process.env.GOOGLE_SPREADSHEET_API_KEY
-            };
-            const response = (yield sheets.spreadsheets.values.get(request));
-            console.log(JSON.stringify(response, null, 2));
+async function GetBirthday(text) {
+    const sheetsOfUsers = await GetUsersInfo();
+    const usersBirthdays = [];
+    sheetsOfUsers.forEach((el) => {
+        Object.keys(el).forEach((key) => {
+            const value = el[key];
+            if (value === text || `@${value}` === text) {
+                usersBirthdays.push(el);
+            }
+        });
+    });
+    return usersBirthdays;
+}
+exports.GetBirthday = GetBirthday;
+async function BirthdaysTypes() {
+    const sheetsOfUsersInfo = await GetUsersInfo();
+    const birthdaysInFuture = [];
+    const birthdaysInPast = [];
+    sheetsOfUsersInfo.forEach((el) => {
+        const thisYear = (0, moment_1.default)().format('YYYY');
+        let usersDate = el.date.split('.').reverse();
+        usersDate.splice(0, 1, thisYear);
+        usersDate = usersDate.join('');
+        const birthdayWillBe = !((0, moment_1.default)(usersDate, 'YYYYMMDD').fromNow().indexOf('in'));
+        if (birthdayWillBe) {
+            birthdaysInFuture.push(el);
         }
-        catch (error) {
-            console.log(error);
+        else {
+            birthdaysInPast.push(el);
         }
     });
+    const result = {
+        future: birthdaysInFuture,
+        past: birthdaysInPast,
+        all: sheetsOfUsersInfo
+    };
+    return result;
+}
+exports.BirthdaysTypes = BirthdaysTypes;
+function GetListOfBirthdays(usersSheetsArr, amount = usersSheetsArr.length, start = 'beginning') {
+    if ('end' === start) {
+        usersSheetsArr.reverse();
+    }
+    return usersSheetsArr.slice(0, amount);
+}
+exports.GetListOfBirthdays = GetListOfBirthdays;
+async function GetUsersInfo() {
+    try {
+        const request = {
+            spreadsheetId: process.env.SPREADSHEET_ID,
+            range: ['A1:ZZ'],
+            auth: process.env.GOOGLE_SPREADSHEET_API_KEY
+        };
+        const response = (await sheets.spreadsheets.values.get(request)).data.values;
+        const usersInfoDescription = ['first_name', 'last_name', 'date', 'username'];
+        const usersInfoObj = [];
+        response.slice(1).forEach((el) => {
+            const usersInfo = {};
+            el.slice(0, -1).forEach((_, index) => {
+                const userInfoDescription = usersInfoDescription[index];
+                usersInfo[userInfoDescription] = el[index];
+            });
+            usersInfoObj.push(usersInfo);
+        });
+        return usersInfoObj;
+    }
+    catch (error) {
+        console.log(error);
+    }
 }
 exports.GetUsersInfo = GetUsersInfo;
-GetUsersInfo();
