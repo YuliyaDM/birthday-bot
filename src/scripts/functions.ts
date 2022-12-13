@@ -9,7 +9,7 @@ import ILangList from '../common/interfaces/@types/langSettings/IList'
 import userInfoKeys from '../common/interfaces/@types/usersInfoSheets.d.ts/userInfoKeys'
 import usersInfoSheets from '../common/interfaces/@types/usersInfoSheets.d.ts/usersInfoSheets'
 import * as Regexp from '../constants/regexp'
-import { GetAgePhrase } from '../scripts/Phrases'
+import { GetAgePhrase } from '../scripts/phrases'
 
 const { google } = require('googleapis')
 const sheets = google.sheets('v4')
