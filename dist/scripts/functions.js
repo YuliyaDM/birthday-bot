@@ -30,7 +30,7 @@ exports.GetUsersInfo = exports.GetListOfBirthdays = exports.BirthdaysTypes = exp
 /* eslint-disable no-unused-vars */
 const moment_1 = __importDefault(require("moment"));
 const Regexp = __importStar(require("../constants/regexp"));
-const Phrases_1 = require("./Phrases");
+const Phrases_1 = require("../scripts/Phrases");
 const { google } = require('googleapis');
 const sheets = google.sheets('v4');
 require('dotenv').config({ path: './private/.env' });

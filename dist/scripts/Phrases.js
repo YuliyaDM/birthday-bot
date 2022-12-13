@@ -6,7 +6,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.BirthdaysListPhrase = exports.BirthdaysWillBePhrase = exports.BirthdaysLeftPhrase = exports.WhoHasThisAgePhrase = exports.GetAgePhrase = exports.GetBirthdayPhrase = void 0;
 /* eslint-disable no-unused-vars */
 const moment_1 = __importDefault(require("moment"));
-const functions_1 = require("./functions");
 function GetBirthdayPhrase(userInfo) {
     // how many months will be of left
     const thisYear = (0, moment_1.default)().format('YYYY');
@@ -98,19 +97,3 @@ async function BirthdaysListPhrase(birthdaysList, amount = birthdaysList.length,
     });
 }
 exports.BirthdaysListPhrase = BirthdaysListPhrase;
-const BIRTHDAYPAST = (0, functions_1.BirthdaysTypes)().then((value) => {
-    const birthdayGirl = {
-        first_name: 'Lijua',
-        last_name: '',
-        date: '03.06.2009',
-        username: '@ju_par'
-    };
-    console.log(BirthdaysLeftPhrase(value.past));
-    console.log(BirthdaysWillBePhrase(value.future));
-    console.log(GetBirthdayPhrase(birthdayGirl));
-    console.log(GetAgePhrase(birthdayGirl));
-    const peers13 = (0, functions_1.WhoHasThisAge)(13).then((value) => {
-        const peers = value;
-        console.log(WhoHasThisAgePhrase(value));
-    });
-});

@@ -1,9 +1,7 @@
 /* eslint-disable no-unused-vars */
 import moment from 'moment'
 
-import { IBirthdaysTypes } from '../common/interfaces/@types/IFunctions'
 import usersInfoSheets from '../common/interfaces/@types/usersInfoSheets.d.ts/usersInfoSheets'
-import { BirthdaysTypes, WhoHasThisAge } from './functions'
 
 export function GetBirthdayPhrase (userInfo: usersInfoSheets): string {
   // how many months will be of left
@@ -99,23 +97,3 @@ export async function BirthdaysListPhrase (birthdaysList: usersInfoSheets[], amo
     result += `${phrase} \n`
   })
 }
-
-const BIRTHDAYPAST = BirthdaysTypes().then((value: IBirthdaysTypes) => {
-  const birthdayGirl: usersInfoSheets = {
-    first_name: 'Lijua',
-    last_name: '',
-    date: '03.06.2009',
-    username: '@ju_par'
-  }
-
-  console.log(BirthdaysLeftPhrase(value.past))
-  console.log(BirthdaysWillBePhrase(value.future))
-  console.log(GetBirthdayPhrase(birthdayGirl))
-  console.log(GetAgePhrase(birthdayGirl))
-
-  const peers13 = WhoHasThisAge(13).then((value) => {
-    const peers: usersInfoSheets[] = value
-
-    console.log(WhoHasThisAgePhrase(value))
-  })
-})
