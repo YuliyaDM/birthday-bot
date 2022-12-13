@@ -3,7 +3,7 @@ import moment from 'moment'
 
 import { IBirthdaysTypes } from '../common/interfaces/@types/IFunctions'
 import usersInfoSheets from '../common/interfaces/@types/usersInfoSheets.d.ts/usersInfoSheets'
-import { BirthdaysTypes, GetUsersInfo, WhoHasThisAge } from './functions'
+import { BirthdaysTypes, WhoHasThisAge } from './functions'
 
 export function GetBirthdayPhrase (userInfo: usersInfoSheets): string {
   // how many months will be of left
