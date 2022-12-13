@@ -1,4 +1,4 @@
-import ILangList from './IList'
+import ILangList from './IList.interface'
 
 type Name = string | undefined;
 

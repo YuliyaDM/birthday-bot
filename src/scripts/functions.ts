@@ -1,13 +1,13 @@
 /* eslint-disable no-unused-vars */
 import moment from 'moment'
 
-import { IBirthdaysTypes, IFindNameInGetCommands, IGetCommands, IGetUsersInfo, IRequest } from '../common/interfaces/@types/commands/IFunctions'
-import { IRegexpsGetCommands } from '../common/interfaces/@types/IRegexp'
-import ILanguageArr from '../common/interfaces/@types/langSettings/IArr'
-import ILangList from '../common/interfaces/@types/langSettings/IList'
-import INewUserLang from '../common/interfaces/@types/langSettings/INewUserLang'
-import userInfoKeys from '../common/interfaces/@types/usersInfoSheets/userInfoKeys'
-import usersInfoSheets from '../common/interfaces/@types/usersInfoSheets/usersInfoSheets'
+import { IBirthdaysTypes, IFindNameInGetCommands, IGetCommands, IGetUsersInfo, IRequest } from '../common/interfaces/@types/commands/IFunctions.interface'
+import { IRegexpsGetCommands } from '../common/interfaces/@types/IRegexp.interface'
+import ILanguageArr from '../common/interfaces/@types/langSettings/IArr.interface'
+import ILangList from '../common/interfaces/@types/langSettings/IList.interface'
+import INewUserLang from '../common/interfaces/@types/langSettings/INewUserLang.interface'
+import userInfoKeys from '../common/interfaces/@types/usersInfoSheets/userInfoKeys.interface'
+import usersInfoSheets from '../common/interfaces/@types/usersInfoSheets/usersInfoSheets.interface'
 import * as Regexp from '../constants/regexp'
 import { GetAgePhrase } from '../scripts/phrases'
 

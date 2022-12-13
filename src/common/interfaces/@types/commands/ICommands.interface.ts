@@ -1,8 +1,8 @@
-import ICallBackQueryLang from '../langSettings/CallBackQuery/ICallBackQueryLang'
-import IChooseLang from '../langSettings/IChooseLang'
-import ILanguages from '../langSettings/ICommands'
-import IGetAge from './IGetAge'
-import IGetBirthday from './IGetBirthday'
+import ICallBackQueryLang from '../langSettings/CallBackQuery/ICallBackQueryLang.interface'
+import IChooseLang from '../langSettings/IChooseLang.interface'
+import ILanguages from '../langSettings/ICommands.interface'
+import IGetAge from './IGetAge.interface'
+import IGetBirthday from './IGetBirthday.interface'
 
 export default interface ICommands {
     // main commands

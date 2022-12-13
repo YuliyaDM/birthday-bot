@@ -1,4 +1,4 @@
-import usersInfoSheets from '../usersInfoSheets/usersInfoSheets'
+import usersInfoSheets from '../usersInfoSheets/usersInfoSheets.interface'
 
 export type IGetCommands = 'getAge' | 'getBirthday' | 'whoHasThisAge'
 

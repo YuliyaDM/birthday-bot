@@ -1,4 +1,4 @@
-import IGetAge from './IGetAge'
+import IGetAge from './IGetAge.interface'
 
 interface IGetBirthday extends IGetAge {}
 

@@ -1,4 +1,4 @@
-import { IMatchGetCommands, IRegexpsGetCommands } from '../common/interfaces/@types/IRegexp'
+import { IMatchGetCommands, IRegexpsGetCommands } from '../common/interfaces/@types/IRegexp.interface'
 
 export const getBirthday: IRegexpsGetCommands = {
   removeCommand: /^.*\/getBirthday( ){0,}|( ){1,}$/mg,

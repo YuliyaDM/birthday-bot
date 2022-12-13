@@ -1,4 +1,4 @@
-import IZodiaks from '../common/interfaces/@types/zodiaks/IZodiaks'
+import IZodiaks from '../common/interfaces/@types/zodiaks/IZodiaks.interface'
 
 const ZODIAKS: IZodiaks = {
   Capricorn: {
@@ -29,7 +29,7 @@ const ZODIAKS: IZodiaks = {
       end: '04.19'
     }
   },
-  Tauru: {
+  Taurus: {
     sticker: '♉',
     months: {
       begin: '04.20',

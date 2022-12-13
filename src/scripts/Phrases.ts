@@ -1,7 +1,7 @@
 /* eslint-disable no-unused-vars */
 import moment from 'moment'
 
-import usersInfoSheets from '../common/interfaces/@types/usersInfoSheets/usersInfoSheets'
+import usersInfoSheets from '../common/interfaces/@types/usersInfoSheets/usersInfoSheets.interface'
 
 export function GetBirthdayPhrase (userInfo: usersInfoSheets): string {
   // how many months will be of left
