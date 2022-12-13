@@ -26,9 +26,11 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.GetUsersInfo = exports.GetListOfBirthdays = exports.BirthdaysTypes = exports.GetBirthday = exports.FindNameInGetCommands = exports.CheckLangArr = exports.CreateUserLang = exports.CheckLanguage = void 0;
+exports.GetUsersInfo = exports.GetListOfBirthdays = exports.BirthdaysTypes = exports.GetBirthday = exports.FindNameInGetCommands = exports.WhoHasThisAge = exports.CheckLangArr = exports.CreateUserLang = exports.CheckLanguage = void 0;
+/* eslint-disable no-unused-vars */
 const moment_1 = __importDefault(require("moment"));
 const Regexp = __importStar(require("../constants/regexp"));
+const Phrases_1 = require("./Phrases");
 const { google } = require('googleapis');
 const sheets = google.sheets('v4');
 require('dotenv').config({ path: './private/.env' });
@@ -69,26 +71,32 @@ function CheckLangArr(usersLang, name) {
     return false;
 }
 exports.CheckLangArr = CheckLangArr;
+async function WhoHasThisAge(age) {
+    const peers = [];
+    const users = await GetUsersInfo();
+    users.forEach((el) => {
+        const elAge = (0, Phrases_1.GetAgePhrase)(el);
+        if (elAge === age) {
+            peers.push(el);
+        }
+    });
+    return peers;
+}
+exports.WhoHasThisAge = WhoHasThisAge;
 function FindNameInGetCommands(text) {
     const command = text.match(Regexp.matchGetCommands.findCommands);
     const regexps = Regexp[command];
-    const { removeCommand, findError, findSpace, findDigits } = regexps;
+    const { removeCommand, findError, findDigits } = regexps;
     const matchName = text.replace(removeCommand, '');
     const isError = matchName.match(findError);
     if (!isError) {
-        if (matchName.length) {
-            if (findDigits) {
-                const age = matchName.match(findDigits)[0];
-                if (100 < +age) {
-                    return 'A very big age';
-                }
+        if (matchName.match(findDigits)) {
+            const age = matchName.match(findDigits)[0];
+            if (100 < +age) {
+                return 'A very big age';
             }
-            if (matchName.match(findSpace)) {
-                return matchName.split(' ');
-            }
-            return matchName;
         }
-        return '';
+        return matchName !== null && matchName !== void 0 ? matchName : '';
     }
     return null;
 }
@@ -96,14 +104,17 @@ exports.FindNameInGetCommands = FindNameInGetCommands;
 async function GetBirthday(text) {
     const sheetsOfUsers = await GetUsersInfo();
     const usersBirthdays = [];
-    sheetsOfUsers.forEach((el) => {
+    sheetsOfUsers.forEach((el, index) => {
         Object.keys(el).forEach((key) => {
             const value = el[key];
-            if (value === text || `@${value}` === text) {
-                usersBirthdays.push(el);
-            }
+            text.split(' ').forEach((userInfo) => {
+                if (value === userInfo || `@${value}` === userInfo) {
+                    usersBirthdays.push(el);
+                }
+            });
         });
     });
+    console.log(usersBirthdays);
     return usersBirthdays;
 }
 exports.GetBirthday = GetBirthday;
@@ -157,7 +168,13 @@ async function GetUsersInfo() {
             });
             usersInfoObj.push(usersInfo);
         });
-        return usersInfoObj;
+        const sortUsers = usersInfoObj;
+        sortUsers.sort((previousEl, nextEl) => {
+            const previousDate = previousEl.date.split('.')[2];
+            const nextDate = nextEl.date.split('.')[2];
+            return +nextDate - +previousDate;
+        });
+        return sortUsers;
     }
     catch (error) {
         console.log(error);

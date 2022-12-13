@@ -3,26 +3,51 @@ import moment from 'moment'
 
 import { IBirthdaysTypes } from '../common/interfaces/@types/IFunctions'
 import usersInfoSheets from '../common/interfaces/@types/usersInfoSheets.d.ts/usersInfoSheets'
-import { BirthdaysTypes } from './functions'
+import { BirthdaysTypes, GetUsersInfo, WhoHasThisAge } from './functions'
 
-export function GetBirthdayPhrase (text: usersInfoSheets): string {
+export function GetBirthdayPhrase (userInfo: usersInfoSheets): string {
+  // how many months will be of left
   const thisYear: string = moment().format('YYYY')
-  const date = text.date.split('.').reverse()
-  date.splice(0, 1, thisYear)
-  date.join('')
+  const usersMomentDate = userInfo.date.split('.').reverse()
+  usersMomentDate.splice(0, 1, thisYear)
+  usersMomentDate.join('')
 
-  const birthdayTime: string = moment(date, 'YYYYMMDD').from(moment().add(1, 'day'))
+  // how many days will be or left
+  const milisecondsDay: number = 86400000
+  const usersChangedDate: string = userInfo.date.split('.').reverse().join('-').replace(/\d{4}/gm, thisYear)
+  const usersDate: string = `${usersChangedDate}T00:00:00.000Z`
+  const currentDate: number = Date.parse(new Date().toString())
+  const leftDays = Math.round((currentDate - Date.parse(usersDate)) / milisecondsDay)
+
+  const birthdayTime: string = moment(usersMomentDate, 'YYYYMMDD').from(moment().add(1, 'day'))
 
   if (-1 !== birthdayTime.indexOf('ago')) {
-    const phrase: string = `${text.first_name}'s birthday was ${birthdayTime}`
+    const phrase: string = `${userInfo.first_name}'s birthday was ${birthdayTime} (${leftDays} days left)`
     return phrase
   }
-  const phrase: string = `${text.first_name}'s birthday will be ${birthdayTime}`
+  const phrase: string = `${userInfo.first_name}'s birthday will be ${birthdayTime} (in ${leftDays} days)`
   return phrase
 }
 
-export async function GetAgePhrase (text: number | string): Promise<void | string> {
-  return ''
+export function GetAgePhrase (userInfo: usersInfoSheets): number {
+  const newDate: Date = new Date()
+  const currentDate: number[] = [newDate.getFullYear(), newDate.getMonth(), newDate.getDay()]
+  const usersBirthday: number[] = userInfo.date.split('.').reverse().map(el => +el)
+  const usersAge: number = moment(currentDate).diff(usersBirthday, 'years')
+  return usersAge
+}
+
+export function WhoHasThisAgePhrase (users: usersInfoSheets[]): string {
+  let result: string = ''
+
+  users.forEach((el: usersInfoSheets, index: number) => {
+    let phrase: string = `${index}. ${el.first_name}`
+    if (el.last_name) { phrase += ` ${el.last_name}` }
+    result += '\n'
+    result += phrase
+  })
+
+  return result
 }
 
 export async function BirthdaysLeftPhrase (birthdaysList: usersInfoSheets[], amount: number = birthdaysList.length, start: 'beginning' | 'end' = 'beginning'): Promise<string | void> {
@@ -76,6 +101,21 @@ export async function BirthdaysListPhrase (birthdaysList: usersInfoSheets[], amo
 }
 
 const BIRTHDAYPAST = BirthdaysTypes().then((value: IBirthdaysTypes) => {
+  const birthdayGirl: usersInfoSheets = {
+    first_name: 'Lijua',
+    last_name: '',
+    date: '03.06.2009',
+    username: '@ju_par'
+  }
+
   console.log(BirthdaysLeftPhrase(value.past))
   console.log(BirthdaysWillBePhrase(value.future))
+  console.log(GetBirthdayPhrase(birthdayGirl))
+  console.log(GetAgePhrase(birthdayGirl))
+
+  const peers13 = WhoHasThisAge(13).then((value) => {
+    const peers: usersInfoSheets[] = value
+
+    console.log(WhoHasThisAgePhrase(value))
+  })
 })

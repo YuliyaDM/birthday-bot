@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import moment from 'moment'
 
 import { IBirthdaysTypes, IFindNameInGetCommands, IGetCommands, IGetUsersInfo, IRequest } from '../common/interfaces/@types/IFunctions'
@@ -8,6 +9,7 @@ import ILangList from '../common/interfaces/@types/langSettings/IList'
 import userInfoKeys from '../common/interfaces/@types/usersInfoSheets.d.ts/userInfoKeys'
 import usersInfoSheets from '../common/interfaces/@types/usersInfoSheets.d.ts/usersInfoSheets'
 import * as Regexp from '../constants/regexp'
+import { GetAgePhrase } from './phrases'
 
 const { google } = require('googleapis')
 const sheets = google.sheets('v4')
@@ -50,24 +52,31 @@ export function CheckLangArr (usersLang: ILanguageArr, name: string): (number | 
   return false
 }
 
+export async function WhoHasThisAge (age: number): Promise<usersInfoSheets[]> {
+  const peers: Partial<usersInfoSheets[]> = []
+
+  const users: usersInfoSheets[] = await GetUsersInfo()
+
+  users.forEach((el: usersInfoSheets) => {
+    const elAge: number = GetAgePhrase(el)
+    if (elAge === age) { peers.push(el) }
+  })
+
+  return peers as usersInfoSheets[]
+}
+
 export function FindNameInGetCommands (text: string): IFindNameInGetCommands {
   const command: IGetCommands = text.match(Regexp.matchGetCommands.findCommands) as unknown as IGetCommands
   const regexps: IRegexpsGetCommands = Regexp[command]
-  const { removeCommand, findError, findSpace, findDigits } = regexps
+  const { removeCommand, findError, findDigits } = regexps
   const matchName: string = text.replace(removeCommand, '')
   const isError: (null | RegExpMatchArray) = matchName.match(findError)
   if (!isError) {
-    if (matchName.length) {
-      if (findDigits) {
-        const age: string = matchName.match(findDigits)![0]
-        if (100 < +age) { return 'A very big age' }
-      }
-      if (matchName.match(findSpace)) {
-        return matchName.split(' ')
-      }
-      return matchName
+    if (matchName.match(findDigits as RegExp)) {
+      const age: string = matchName.match(findDigits as RegExp)![0]
+      if (100 < +age) { return 'A very big age' }
     }
-    return ''
+    return matchName ?? ''
   }
   return null
 }
@@ -76,12 +85,16 @@ export async function GetBirthday (text: string): Promise<usersInfoSheets[]> {
   const sheetsOfUsers: usersInfoSheets[] = await GetUsersInfo()
   const usersBirthdays: Partial<usersInfoSheets>[] = []
 
-  sheetsOfUsers.forEach((el: usersInfoSheets) => {
+  sheetsOfUsers.forEach((el: usersInfoSheets, index: number) => {
     Object.keys(el).forEach((key: string) => {
       const value: string = el[key as keyof usersInfoSheets]
-      if (value === text || `@${value}` === text) { usersBirthdays.push(el) }
+      text.split(' ').forEach((userInfo: string) => {
+        if (value === userInfo || `@${value}` === userInfo) { usersBirthdays.push(el) }
+      })
     })
   })
+
+  console.log(usersBirthdays)
 
   return usersBirthdays as usersInfoSheets[]
 }
@@ -141,7 +154,16 @@ export async function GetUsersInfo (): IGetUsersInfo {
       usersInfoObj.push(usersInfo as usersInfoSheets)
     })
 
-    return usersInfoObj as usersInfoSheets[]
+    const sortUsers = usersInfoObj as usersInfoSheets[]
+
+    sortUsers.sort((previousEl: usersInfoSheets, nextEl: usersInfoSheets) => {
+      const previousDate: string = previousEl.date.split('.')[2]
+      const nextDate: string = nextEl.date.split('.')[2]
+
+      return +nextDate - +previousDate
+    })
+
+    return sortUsers
   }
   catch (error: unknown) {
     console.log(error)

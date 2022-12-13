@@ -74,7 +74,7 @@ describe('a couple of tests of first functions', () => {
     it('should return first name and last name of user in array', () => {
       const test2 = '/getAge Julia Pirogova'
 
-      assert.equal(FindNameInGetCommands(test2).length, 2)
+      assert.equal(FindNameInGetCommands(test2), 'Julia Pirogova')
     })
     it('should return null', () => {
       const test1 = '/getAge 209=fw=4-'
@@ -100,7 +100,12 @@ describe('a couple of tests of first functions', () => {
     it('should return first name and last name of user in array', () => {
       const test1 = '/getBirthday Julia Pirogova'
 
-      assert.equal(FindNameInGetCommands(test1).length, 2)
+      assert.equal(FindNameInGetCommands(test1), 'Julia Pirogova')
+    })
+    it('should return first name and username', () => {
+      const test1 = '/getBirthday Lijua @ju_par'
+
+      assert.equal(FindNameInGetCommands(test1), 'Lijua @ju_par')
     })
     it('should return an empty string', () => {
       const test1 = '/getBirthday'
