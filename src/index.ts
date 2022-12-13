@@ -3,7 +3,7 @@ require('dotenv').config({ path: './private/.env' })
 import { Context, Telegraf } from 'telegraf'
 import { Update } from 'telegraf/typings/core/types/typegram'
 
-import INewUserLang from './common/interfaces/@types/INewUserLang'
+import INewUserLang from './common/interfaces/@types/langSettings/INewUserLang'
 import IQueue from './common/interfaces/@types/IQueue'
 import ICallBackQuery from './common/interfaces/@types/langSettings/CallBackQuery/ICallBackQuery'
 import ILangList from './common/interfaces/@types/langSettings/IList'

@@ -1,13 +1,13 @@
 /* eslint-disable no-unused-vars */
 import moment from 'moment'
 
-import { IBirthdaysTypes, IFindNameInGetCommands, IGetCommands, IGetUsersInfo, IRequest } from '../common/interfaces/@types/IFunctions'
-import INewUserLang from '../common/interfaces/@types/INewUserLang'
+import { IBirthdaysTypes, IFindNameInGetCommands, IGetCommands, IGetUsersInfo, IRequest } from '../common/interfaces/@types/commands/IFunctions'
 import { IRegexpsGetCommands } from '../common/interfaces/@types/IRegexp'
 import ILanguageArr from '../common/interfaces/@types/langSettings/IArr'
 import ILangList from '../common/interfaces/@types/langSettings/IList'
-import userInfoKeys from '../common/interfaces/@types/usersInfoSheets.d.ts/userInfoKeys'
-import usersInfoSheets from '../common/interfaces/@types/usersInfoSheets.d.ts/usersInfoSheets'
+import INewUserLang from '../common/interfaces/@types/langSettings/INewUserLang'
+import userInfoKeys from '../common/interfaces/@types/usersInfoSheets/userInfoKeys'
+import usersInfoSheets from '../common/interfaces/@types/usersInfoSheets/usersInfoSheets'
 import * as Regexp from '../constants/regexp'
 import { GetAgePhrase } from '../scripts/phrases'
 
